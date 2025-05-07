@@ -1,5 +1,5 @@
 from agendamentos import agendar, cancelar, consultar
-from servicos import mostrar_servicos
+from servicos import servicos, mostrar_servicos_terminal
 from utils import dentro_horario_comercial
 
 def menu():
@@ -26,7 +26,7 @@ def main():
         elif escolha == "3":
             consultar()
         elif escolha == "4":
-            mostrar_servicos()
+            mostrar_servicos_terminal()
             input("Pressione Enter para continuar: ")
         elif escolha == "5":
             print("Saindo...")

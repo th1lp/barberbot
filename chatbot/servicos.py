@@ -8,7 +8,10 @@ servicos = {
     "7": "Platinado - R$55"
 }
 
-def mostrar_servicos():
+def mostrar_servicos_terminal():
     print("\nServiços disponíveis:")
     for codigo, nome in servicos.items():
         print(f"{codigo}. {nome}")
+
+def get_servicos_texto():
+    return "\n".join([f"{codigo}. {nome}" for codigo, nome in servicos.items()])

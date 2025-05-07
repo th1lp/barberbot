@@ -16,5 +16,11 @@
         "servico": "5",
         "data": "16/05/2025",
         "hora": "16.00"
+    },
+    {
+        "nome": "henrique",
+        "servico": "1",
+        "data": null,
+        "hora": "10:30"
     }
 ]

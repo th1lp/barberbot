@@ -1,6 +1,7 @@
 import json
 from utils import completar_data_com_ano
-from servicos import mostrar_servicos, servicos
+from servicos import servicos
+
 
 ARQUIVO = "agendamentos.json"
 
@@ -15,57 +16,40 @@ def salvar_agendamentos(agendamentos):
     with open(ARQUIVO, "w") as f:
         json.dump(agendamentos, f, indent=4)
 
-def agendar():
-    nome = input("Nome: ")
+def agendar_ws(nome, codigo_servico, dia_mes, hora):
+    if codigo_servico not in servicos:
+        return "❌ Serviço inválido. Tente novamente."
 
-    mostrar_servicos()
-    codigo = input("Digite o número do serviço desejado: ").strip()
-
-    if codigo not in servicos:
-        print("Serviço inválido. Tente novamente.")
-        return
-    
-    servico = codigo
-    dia_mes = input("Data (dd/mm): ")
     data = completar_data_com_ano(dia_mes)
-    hora = input("Horário (hh:mm): ")
 
     agendamentos = carregar_agendamentos()
     agendamentos.append({
         "nome": nome,
-        "servico": servico,
+        "servico": codigo_servico,
         "data": data,
         "hora": hora
     })
     salvar_agendamentos(agendamentos)
-    print("Agendamento realizado com sucesso!")
-    input("Pressione Enter para voltar. ")
+    return f"✅ Agendamento realizado com sucesso para {nome}, serviço {codigo_servico}, no dia {data} às {hora}."
 
-def cancelar():
-    nome = input("Nome usado na reserva: ")
-    data = input("Data do agendamento: ")
-
+def cancelar_ws(nome, data):
     agendamentos = carregar_agendamentos()
     atualizados = [a for a in agendamentos if not (a["nome"] == nome and a["data"] == data)]
 
     if len(atualizados) < len(agendamentos):
         salvar_agendamentos(atualizados)
-        print("Agendamento cancelado.")
+        return "❌ Agendamento cancelado com sucesso."
     else:
-        print("Agendamento não encontrado.")
+        return "⚠️ Agendamento não encontrado."
 
-def consultar():
-    nome = input("Digite seu nome para consultar seus agendamentos: ").strip().lower()
+def consultar_ws(nome):
     agendamentos = carregar_agendamentos()
-    encontrados = [a for a in agendamentos if a["nome"].strip().lower() == nome]
+    encontrados = [a for a in agendamentos if a["nome"].strip().lower() == nome.strip().lower()]
 
     if not encontrados:
-        print("Nenhum agendamento encontrado.")
-        input("Pressione Enter para voltar. ")
-        return
-    
-    print(f"\nAgendamentos de {nome.title()}:")
+        return "📭 Nenhum agendamento encontrado."
+
+    resposta = f"📋 Agendamentos de {nome.title()}:\n"
     for ag in encontrados:
-        print(f'{ag["nome"]} - {ag["servico"]} em {ag["data"]} às {ag["hora"]}')
-        
-    input("Pressione Enter para voltar. ")
+        resposta += f'- {ag["servico"]} em {ag["data"]} às {ag["hora"]}\n'
+    return resposta
