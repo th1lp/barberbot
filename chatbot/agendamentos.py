@@ -16,21 +16,16 @@ def salvar_agendamentos(agendamentos):
     with open(ARQUIVO, "w") as f:
         json.dump(agendamentos, f, indent=4)
 
-def agendar_ws(nome, codigo_servico, dia_mes, hora):
-    if codigo_servico not in servicos:
-        return "❌ Serviço inválido. Tente novamente."
-
-    data = completar_data_com_ano(dia_mes)
-
+def agendar_ws(nome, servico, data, hora):
     agendamentos = carregar_agendamentos()
     agendamentos.append({
         "nome": nome,
-        "servico": codigo_servico,
+        "servico": servico,
         "data": data,
         "hora": hora
     })
     salvar_agendamentos(agendamentos)
-    return f"✅ Agendamento realizado com sucesso para {nome}, serviço {codigo_servico}, no dia {data} às {hora}."
+    return f"✅ Agendamento confirmado para {nome} em {data} às {hora} para {servico}."
 
 def cancelar_ws(nome, data):
     agendamentos = carregar_agendamentos()

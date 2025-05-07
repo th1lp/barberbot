@@ -7,13 +7,14 @@ def dentro_horario_comercial():
 
     return inicio <= agora <= fim
 
-def completar_data_com_ano(dia_mes):
-    """
-    Recebe uma string no formato 'dd/mm' e retorna 'dd/mm/aaaa' com o ano atual.
-    """
+
+from datetime import datetime
+
+def completar_data_com_ano(data_str):
     try:
-        dia, mes = map(int, dia_mes.split('/'))
-        data = datetime(datetime.now().year, mes, dia)
-        return data.strftime('%d/%m/%Y')
-    except (ValueError, IndexError):
-        return None  # Importante para validar datas inválidas no chatbot
+        data = datetime.strptime(data_str, "%d/%m")
+        ano_atual = datetime.now().year
+        data_com_ano = data.replace(year=ano_atual)
+        return data_com_ano.strftime("%d/%m/%Y")
+    except ValueError:
+        return None
