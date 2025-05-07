@@ -111,7 +111,9 @@ def ouvir_mensagens(id_sessao):
                 "2️⃣ Cancelar agendamento\n"
                 "3️⃣ Consultar agendamentos\n"
                 "4️⃣ Ver serviços\n"
-                "5️⃣ Sair"
+                "5️⃣ Ver localização\n"
+                "6️⃣ Falar com o barbeiro\n"
+                "7️⃣ Sair"
             )
             enviar_mensagem(id_sessao, numero, menu_texto)
         elif mensagem == "1":
@@ -133,9 +135,20 @@ def ouvir_mensagens(id_sessao):
             texto_servicos = get_servicos_texto()
             enviar_mensagem(id_sessao, numero, f"💼 Serviços disponíveis:\n{texto_servicos}")
         elif mensagem == "5":
+            enviar_mensagem(id_sessao, numero,
+                "📍 Avenida Doutor Oliveira Brito, Galeria Bruna Center, Sala 1, Ribeira do Pombal 48400000.\n"
+                "🔗 https://maps.app.goo.gl/GVVvGocwkkSYtwrH7"
+            )
+        elif mensagem == "6":
+            enviar_mensagem(
+        id_sessao,
+        numero,
+        "📞 Você pode falar com o barbeiro diretamente pelo WhatsApp:\n"
+        "🔗 https://wa.me/5511912345678"
+    )
+        elif mensagem == "7":
             enviar_mensagem(id_sessao, numero, "👋 Até logo!")
-        else:
-            enviar_mensagem(id_sessao, numero, "❓ Não entendi. Digite *menu* para ver as opções.")
+
 
     # Não mexer daqui em diante
     sio.connect('http://localhost:3000')
