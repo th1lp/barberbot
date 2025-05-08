@@ -1,4 +1,5 @@
 import json
+from servicos import servicos
 
 ARQUIVO = "agendamentos.json"
 
@@ -20,7 +21,6 @@ def agendar_ws(nome, servico, data, hora):
     for agendamento in agendamentos:
         if agendamento['data'] == data and agendamento['hora'] == hora:
             return "⚠️ Esse horário já está agendado. Por favor, escolha outro."
-
     # Se não houver conflito, adiciona o novo agendamento
     agendamentos.append({
         "nome": nome,
@@ -50,5 +50,7 @@ def consultar_ws(nome):
 
     resposta = f"📋 Agendamentos de {nome.title()}:\n"
     for ag in encontrados:
-        resposta += f'- {ag["servico"]} em {ag["data"]} às {ag["hora"]}\n'
+        # Obtém o nome do serviço baseado no código
+        servico_desc = servicos.get(ag["servico"], "Serviço desconhecido")
+        resposta += f'- {servico_desc} em {ag["data"]} às {ag["hora"]}\n'
     return resposta
