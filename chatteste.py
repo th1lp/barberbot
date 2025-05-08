@@ -2,7 +2,7 @@ import requests
 import socketio
 from agendamentos import agendar_ws, cancelar_ws, consultar_ws
 from servicos import servicos, get_servicos_texto
-from utils import completar_data_com_ano
+from utils import completar_data_com_ano, hora_valida
 
 # Função para enviar uma mensagem via API
 def enviar_mensagem(id_sessao, numero, mensagem):
@@ -56,7 +56,7 @@ def ouvir_mensagens(id_sessao):
                 return
             estado["dados"]["servico"] = mensagem
             estado["etapa"] = "data"
-            enviar_mensagem(id_sessao, numero, "🗕️ Digite a data (dd/mm):")
+            enviar_mensagem(id_sessao, numero, " Digite a data (dd/mm):")
             return
 
         if estado["etapa"] == "data":
@@ -70,12 +70,25 @@ def ouvir_mensagens(id_sessao):
             return
 
         if estado["etapa"] == "hora":
+            if not hora_valida(mensagem):
+                enviar_mensagem(id_sessao, numero, "❌ Hora inválida. Use o formato hh:mm, como 14:30.")
+                return
+
             estado["dados"]["hora"] = mensagem
             dados = estado["dados"]
             resposta = agendar_ws(dados["nome"], dados["servico"], dados["data"], dados["hora"])
+
+            # Verifica se a resposta indica conflito de horário
+            if "já está agendado" in resposta.lower():
+                enviar_mensagem(id_sessao, numero, resposta)
+                enviar_mensagem(id_sessao, numero, "⏳ Por favor, informe outro horário disponível (ex: 16:00):")
+                estado["etapa"] = "hora"
+                return
+
             enviar_mensagem(id_sessao, numero, resposta)
             estado_usuarios.pop(numero)
             return
+
 
         # Comando inicial para cancelar agendamento
         if mensagem == "cancelar":
@@ -133,11 +146,12 @@ def ouvir_mensagens(id_sessao):
             enviar_mensagem(id_sessao, numero, resposta)
         elif mensagem == "4":
             texto_servicos = get_servicos_texto()
-            enviar_mensagem(id_sessao, numero, f"💼 Serviços disponíveis:\n{texto_servicos}")
+            enviar_mensagem(id_sessao, numero, f"💼 Serviços disponíveis:\n{texto_servicos}\n\nDigite menu para voltar para as opções")
         elif mensagem == "5":
             enviar_mensagem(id_sessao, numero,
                 "📍 Avenida Doutor Oliveira Brito, Galeria Bruna Center, Sala 1, Ribeira do Pombal 48400000.\n"
                 "🔗 https://maps.app.goo.gl/GVVvGocwkkSYtwrH7"
+                "\n\nDigite menu para voltar para as opções"
             )
         elif mensagem == "6":
             enviar_mensagem(
@@ -145,6 +159,7 @@ def ouvir_mensagens(id_sessao):
         numero,
         "📞 Você pode falar com o barbeiro diretamente pelo WhatsApp:\n"
         "🔗 https://wa.me/5511912345678"
+        "\n\nDigite menu para voltar para as opções"
     )
         elif mensagem == "7":
             enviar_mensagem(id_sessao, numero, "👋 Até logo!")

@@ -1,5 +1,5 @@
-from agendamentos import agendar, cancelar, consultar
-from servicos import servicos, mostrar_servicos_terminal
+from agendamentos import agendar_ws, cancelar_ws, consultar_ws
+from servicos import mostrar_servicos_terminal
 from utils import dentro_horario_comercial
 
 def menu():
@@ -18,14 +18,14 @@ def main():
 
         if escolha == "1":
             if dentro_horario_comercial():
-                agendar()
+                agendar_ws()
             else:
                 print("A barbearia está fora do horário comercial.")
                 input("Pressione Enter para voltar. ")
         elif escolha == "2":
-            cancelar()
+            cancelar_ws()
         elif escolha == "3":
-            consultar()
+            consultar_ws()
         elif escolha == "4":
             mostrar_servicos_terminal()
             input("Pressione Enter para continuar: ")

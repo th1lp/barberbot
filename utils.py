@@ -3,12 +3,9 @@ from datetime import datetime, time
 def dentro_horario_comercial():
     agora = datetime.now().time()
     inicio = time(9, 0)   # 09:00
-    fim = time(23, 0)     # 23:00 (corrigido: antes estava escrito 19:00 no comentário)
+    fim = time(22, 0)     # 23:00
 
     return inicio <= agora <= fim
-
-
-from datetime import datetime
 
 def completar_data_com_ano(data_str):
     try:
@@ -18,3 +15,10 @@ def completar_data_com_ano(data_str):
         return data_com_ano.strftime("%d/%m/%Y")
     except ValueError:
         return None
+
+def hora_valida(hora_str):
+    try:
+        datetime.strptime(hora_str, "%H:%M")
+        return True
+    except ValueError:
+        return False

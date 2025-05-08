@@ -1,7 +1,4 @@
 import json
-from utils import completar_data_com_ano
-from servicos import servicos
-
 
 ARQUIVO = "agendamentos.json"
 
@@ -18,6 +15,13 @@ def salvar_agendamentos(agendamentos):
 
 def agendar_ws(nome, servico, data, hora):
     agendamentos = carregar_agendamentos()
+
+    # Verifica se já existe um agendamento com a mesma data e hora
+    for agendamento in agendamentos:
+        if agendamento['data'] == data and agendamento['hora'] == hora:
+            return "⚠️ Esse horário já está agendado. Por favor, escolha outro."
+
+    # Se não houver conflito, adiciona o novo agendamento
     agendamentos.append({
         "nome": nome,
         "servico": servico,
@@ -25,7 +29,7 @@ def agendar_ws(nome, servico, data, hora):
         "hora": hora
     })
     salvar_agendamentos(agendamentos)
-    return f"✅ Agendamento confirmado para {nome} em {data} às {hora} para {servico}."
+    return f"✅ Agendamento realizado com sucesso para {data} às {hora}."
 
 def cancelar_ws(nome, data):
     agendamentos = carregar_agendamentos()
@@ -33,7 +37,7 @@ def cancelar_ws(nome, data):
 
     if len(atualizados) < len(agendamentos):
         salvar_agendamentos(atualizados)
-        return "❌ Agendamento cancelado com sucesso."
+        return "❌ Agendamento cancelado com sucesso.\n\nDigite menu para voltar para as opções"
     else:
         return "⚠️ Agendamento não encontrado."
 

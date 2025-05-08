@@ -3,30 +3,18 @@
         "nome": "Joao",
         "servico": "3",
         "data": "10/05/2025",
-        "hora": "14.00"
+        "hora": "14:00"
     },
     {
         "nome": "Thiago",
         "servico": "4",
         "data": "15/06/2025",
-        "hora": "14.30"
+        "hora": "14:30"
     },
     {
         "nome": "Thiago",
         "servico": "5",
         "data": "16/05/2025",
-        "hora": "16.00"
-    },
-    {
-        "nome": "henrique",
-        "servico": "1",
-        "data": null,
-        "hora": "10:30"
-    },
-    {
-        "nome": "henrique",
-        "servico": "1",
-        "data": null,
-        "hora": "11:30"
+        "hora": "16:00"
     }
 ]
